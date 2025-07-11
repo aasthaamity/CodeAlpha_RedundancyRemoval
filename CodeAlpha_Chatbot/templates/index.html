@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CodeAlpha Chatbot</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background-color: #f4f4f4; }
+        #chatbox { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        .msg { margin: 10px 0; }
+        .user { color: blue; }
+        .bot { color: green; }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <h2>Ask CodeAlpha Chatbot</h2>
+        <div id="messages"></div>
+        <input type="text" id="user_input" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("user_input");
+            let message = input.value.trim();
+            if (!message) return;
+
+            let messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += `<div class="msg user"><b>You:</b> ${message}</div>`;
+
+            fetch(`/get?msg=${message}`)
+                .then(response => response.text())
+                .then(data => {
+                    messagesDiv.innerHTML += `<div class="msg bot"><b>Bot:</b> ${data}</div>`;
+                    input.value = "";
+                });
+        }
+    </script>
+</body>
+</html>
